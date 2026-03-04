@@ -1,168 +1,286 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
 
 <head>
+  <!-- Favicons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="manifest" href="/site.webmanifest">
   <link rel="mask-icon" href="/safari-pinned-tab.png">
   <meta name="msapplication-TileImage" content="/safari-pinned-tab.png">
-  <meta name="msapplication-TileColor" content="#7da7d8">
-  <meta name="theme-color" content="#7da7d8">
+  <meta name="msapplication-TileColor" content="#0A143C">
+  <meta name="theme-color" content="#0A143C">
 
-  <!-- Required meta tags always come first -->
+  <!-- Required meta tags -->
   <meta charset="utf-8">
-  <meta name="description" content="Eclipse Zenoh, unify data in motion, data at rest and computations.">
+  <meta name="description" content="{{ if .Description }}{{ .Description }}{{ else }}Eclipse Zenoh, unify data in motion, data at rest and computations.{{ end }}">
   <meta name="keywords" content="pub/sub, query, geo distributed storage, Rust, protocol, DDS, MQTT, Edge, IoT, MEC">
   <meta name="author" content="The Zenoh Team">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="/css/bootstrap-reboot.css">
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/css/ato.css">
+  <!-- Tailwind CSS (Hugo Pipe) -->
+  {{ $css := resources.Get "css/main.css" | css.TailwindCSS | minify }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+
+  <!-- Chroma syntax highlighting -->
   <link rel="stylesheet" href="/css/syntax.css">
 
-  <!-- Blog feed link -->
+  <!-- Pagefind UI CSS (only loads when pagefind is built) -->
+  <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
+
+  <!-- Blog feed -->
   <link rel="alternate" type="application/rss+xml" href="/blog/index.xml" />
 
   <title>
-    {{ if .IsHome }}
-    {{ .Title }}
-    {{ else }}
-    {{ .Title }} · Zenoh - pub/sub, geo distributed storage, query
-    {{ end }}
+    {{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · Zenoh{{ end }}
   </title>
-</head>
 
-<body>
-  <header class="navbar-expand navbar-dark d-flex flex-column flex-md-row align-items-md-center ato-navbar">
-    <div class="d-flex flex-row justify-content-between pl-2 pr-2">
-      <a class="navbar-brand" href="/">
-        <img src="/img/zenoh-dragon-bg-150x163.png" class="align-middle" alt="">
-      </a>
-      <button class="btn btn-link d-md-none p-0" type="button" data-toggle="collapse" data-target="#ato-nav" aria-controls="ato-nav" aria-expanded="false" aria-label="Toggle navigation">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30" focusable="false">
-        <title>Menu</title><path stroke="white" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"></path></svg>
-      </button>
-    </div>
-    <div class="ato-links collapse pl-4 pl-md-0" id="ato-nav">
-      <ul class="navbar-nav flex-column flex-md-row">
-        <li class="nav-item">
-          <a class="nav-link {{ if .IsHome }} active {{ end }}" href="/">Home</a>
-        </li>
-        <li class="nav-item">
-          {{ $docs := index (.Site.Menus.docs) 1 }}
-          {{ $docHome := index ($docs.Children) 0 }}
-          {{ $isDocs := hasPrefix .Permalink "/docs" }}
-          <a class="nav-link {{ if $isDocs }} active {{ end }}" href="{{ $docHome.URL }}">Documentation</a>
-        </li>
-        <li class="nav-item">
-          {{ $usecases := index (.Site.Menus.usecases) 0 }}
-          {{ $isUsecases := hasPrefix .Permalink "/usecases" }}
-          <a class="nav-link {{ if $isUsecases }} active {{ end }}" href="{{ $usecases.URL }}">Use Cases</a>
-        </li>
-        <li class="nav-item">
-          {{ $isCommunity := hasPrefix .Permalink "/community" }}
-          <a class="nav-link {{ if $isCommunity }} active {{ end }}" href="{{ ref . "/community" }}">Community</a>
-        </li>
-        <li class="nav-item">
-          {{ $adopters := index (.Site.Menus.adopters) 0 }}
-          {{ $isAdopters := hasPrefix .Permalink "/adopters" }}
-          <a class="nav-link {{ if $isAdopters }} active {{ end }}" href="{{ $adopters.URL }}">Adopters</a>
-        </li>
-        <li class="nav-item">
-          {{ $medias := index (.Site.Menus.medias) 0 }}
-          {{ $isMedias := hasPrefix .Permalink "/medias" }}
-          <a class="nav-link {{ if $isMedias }} active {{ end }}" href="{{ $medias.URL }}">Media</a>
-        </li>
-        <li class="nav-item">
-          {{ $blog := index (sort .Site.Menus.blog "Weight" "desc") 0 }}
-          {{ $isBlog := hasPrefix .Permalink "/blog" }}
-          <a class="nav-link {{ if $isBlog }} active {{ end }}" href="{{ $blog.URL }}">Blog</a>
-        </li>
-      </ul>
-    </div>
+  <!-- Dark mode flash prevention (must be synchronous, before first paint) -->
+  <script>
+    (function() {
+      var stored = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 
-    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-      <li class="nav-item">
-        <a class="nav-link p-2" href="https://github.com/eclipse-zenoh/zenoh" target="_blank" rel="noopener"
-          aria-label="GitHub">
-          <svg class="navbar-nav-svg" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 499.36" focusable="false">
-            <title>GitHub</title>
-            <path
-              d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z"
-              fill="currentColor" fill-rule="evenodd" />
-          </svg>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link p-2" href="https://twitter.com/zettascaletech" target="_blank" rel="noopener" aria-label="Twitter">
-          <svg class="navbar-nav-svg" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 416.32" focusable="false">
-            <title>Twitter</title>
-            <path
-              d="M160.83 416.32c193.2 0 298.92-160.22 298.92-298.92 0-4.51 0-9-.2-13.52A214 214 0 0 0 512 49.38a212.93 212.93 0 0 1-60.44 16.6 105.7 105.7 0 0 0 46.3-58.19 209 209 0 0 1-66.79 25.37 105.09 105.09 0 0 0-181.73 71.91 116.12 116.12 0 0 0 2.66 24c-87.28-4.3-164.73-46.3-216.56-109.82A105.48 105.48 0 0 0 68 159.6a106.27 106.27 0 0 1-47.53-13.11v1.43a105.28 105.28 0 0 0 84.21 103.06 105.67 105.67 0 0 1-47.33 1.84 105.06 105.06 0 0 0 98.14 72.94A210.72 210.72 0 0 1 25 370.84a202.17 202.17 0 0 1-25-1.43 298.85 298.85 0 0 0 160.83 46.92"
-              fill="currentColor" />
-          </svg>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link p-2" href="https://discord.gg/2GJ958VuHs" target="_blank" rel="noopener"
-          aria-label="Discord">
-          <svg class="navbar-nav-svg" xmlns="http://www.w3.org/2000/svg" focusable="false">
-            <title>Discord</title>
-            <path fill="currentColor"
-            d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/>
-          </svg>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link p-2" href="https://www.youtube.com/channel/UCslbiyiqgOAPMjCrPWIfQ5Q" target="_blank" rel="noopener"
-          aria-label="Youtube">
-          <svg class="navbar-nav-svg" xmlns="http://www.w3.org/2000/svg" focusable="false">
-            <title>Youtube</title>
-            <path fill="currentColor"
-            d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"/>
-          </svg>
-        </a>
-      </li>
-    </ul>    
-    <!-- Google tag (gtag.js) Moved to G4-->
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PBD6MS51QL"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-PBD6MS51QL');
-  </script>  
-    <script type="application/ld+json">
-        {
-            "@context" : "http://schema.org",
-            "@type" : "BlogPosting",
-            "mainEntityOfPage" : {
-                 "@type" : "WebPage",
-                 "@id" : "{{ .Site.BaseURL }}"
-            },
-            "articleSection" : "{{ .Section }}",
-            "name" : "{{ .Title }}",
-            "headline" : "{{ .Title }}",
-            "datePublished" : "{{ .Date }}",
-            "dateModified" : "{{ .Date }}",
-            "url" : "{{ .Permalink }}",
-            "inLanguage" : "en-US",
-            "author" : "{{ range .Site.Author }}{{ . }}{{ end }}",
-            "creator" : "{{ range .Site.Author }}{{ . }}{{ end }}",
-            "publisher" : "{{ range .Site.Author }}{{ . }}{{ end }}",
-            "accountablePerson" : "{{ range .Site.Author }}{{ . }}{{ end }}",
-            "copyrightHolder" : "{{ range .Site.Author }}{{ . }}{{ end }}",
-            "copyrightYear" : "{{ .Date.Format "2022" }}",
-            "wordCount" : "{{ .WordCount }}",
-            "keywords" : [ {{ with .Keywords }}{{ delimit . ", " }}{{ end }}{{ if .Site.Params.keywords }}, {{ delimit .Site.Params.keywords ", " }}{{ end }} ],
-            "description" : "{{ if .Description }}{{ .Description }}{{ else if .IsPage }}{{ .Summary }}{{ else }}{{ .Site.Params.description }}{{ end }}",
-        }
-        </script>
-  </header>
+  </script>
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ .Site.BaseURL }}" },
+    "articleSection": "{{ .Section }}",
+    "name": "{{ .Title }}",
+    "headline": "{{ .Title }}",
+    "datePublished": "{{ .Date }}",
+    "dateModified": "{{ .Date }}",
+    "url": "{{ .Permalink }}",
+    "inLanguage": "en-US",
+    "description": "{{ if .Description }}{{ .Description }}{{ else if .IsPage }}{{ .Summary }}{{ else }}{{ .Site.Params.description }}{{ end }}"
+  }
+  </script>
+</head>
+
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+
+<!-- Sticky top navbar -->
+<header class="bg-zenoh-navy dark:bg-gray-950 sticky top-0 z-50 shadow-md">
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <a class="flex items-center gap-2 flex-shrink-0" href="/">
+        <img src="/img/zenoh-dragon-light.png" class="h-9 w-auto" alt="Zenoh logo">
+        <span class="font-logo font-bold text-white text-xl tracking-wide">Zenoh</span>
+      </a>
+
+      <!-- Desktop nav links -->
+      <nav class="hidden md:flex items-center h-16 ml-6" aria-label="Main navigation">
+        {{ $isDocs := hasPrefix .Permalink "/docs" }}
+        {{ $docs := index (.Site.Menus.docs) 1 }}
+        {{ $docHome := index ($docs.Children) 0 }}
+        {{ $isUsecases := hasPrefix .Permalink "/usecases" }}
+        {{ $usecases := index (.Site.Menus.usecases) 0 }}
+        {{ $isCommunity := hasPrefix .Permalink "/community" }}
+        {{ $isAdopters := hasPrefix .Permalink "/adopters" }}
+        {{ $adopters := index (.Site.Menus.adopters) 0 }}
+        {{ $isMedias := hasPrefix .Permalink "/medias" }}
+        {{ $medias := index (.Site.Menus.medias) 0 }}
+        {{ $isReport := hasPrefix .Permalink "/zenoh-report" }}
+        {{ $report := index (.Site.Menus.zenohreport) 0 }}
+        {{ $isBlog := hasPrefix .Permalink "/blog" }}
+        {{ $blog := index (sort .Site.Menus.blog "Weight" "desc") 0 }}
+        <a href="/"
+           class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if .IsHome }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Home</a>
+        <a href="{{ $docHome.URL }}"
+           class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isDocs }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Documentation</a>
+        <a href="{{ $usecases.URL }}"
+           class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isUsecases }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Use Cases</a>
+        <a href="{{ ref . "/community" }}"
+           class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isCommunity }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Community</a>
+        <a href="{{ $adopters.URL }}"
+           class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isAdopters }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Adopters</a>
+        <a href="{{ $medias.URL }}"
+           class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isMedias }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Media</a>
+        {{ if $report }}
+        <a href="{{ $report.URL }}"
+           class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isReport }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Report</a>
+        {{ end }}
+        <a href="{{ $blog.URL }}"
+           class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isBlog }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Blog</a>
+      </nav>
+
+      <!-- Right side: search + social icons + dark mode toggle + mobile hamburger -->
+      <div class="flex items-center gap-1 ml-auto">
+
+        <!-- Search icon + dropdown (desktop) -->
+        <div class="relative hidden md:block">
+          <button id="search-toggle" type="button" aria-label="Search"
+                  class="p-2 text-gray-400 hover:text-white transition-colors rounded-md">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+            </svg>
+          </button>
+          <div id="search-dropdown" class="hidden absolute right-0 top-full mt-2 w-80 bg-[#0d1a4a] dark:bg-gray-900 rounded-xl shadow-2xl border border-white/10 p-3 z-50">
+            <div id="global-search"></div>
+          </div>
+        </div>
+
+        <!-- Social icons (desktop only) -->
+        <div class="hidden md:flex items-center gap-1">
+          <a class="p-2 text-gray-400 hover:text-white transition-colors rounded-md" href="https://github.com/eclipse-zenoh/zenoh" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 499.36" focusable="false">
+              <title>GitHub</title>
+              <path d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z" fill="currentColor" fill-rule="evenodd"/>
+            </svg>
+          </a>
+          <a class="p-2 text-gray-400 hover:text-white transition-colors rounded-md" href="https://discord.gg/2GJ958VuHs" target="_blank" rel="noopener" aria-label="Discord">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" focusable="false">
+              <title>Discord</title>
+              <path fill="currentColor" d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/>
+            </svg>
+          </a>
+          <a class="p-2 text-gray-400 hover:text-white transition-colors rounded-md" href="https://www.youtube.com/channel/UCslbiyiqgOAPMjCrPWIfQ5Q" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" focusable="false">
+              <title>YouTube</title>
+              <path fill="currentColor" d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"/>
+            </svg>
+          </a>
+          <a class="p-2 text-gray-400 hover:text-white transition-colors rounded-md" href="https://twitter.com/zettascaletech" target="_blank" rel="noopener" aria-label="Twitter">
+            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 416.32" focusable="false">
+              <title>Twitter</title>
+              <path d="M160.83 416.32c193.2 0 298.92-160.22 298.92-298.92 0-4.51 0-9-.2-13.52A214 214 0 0 0 512 49.38a212.93 212.93 0 0 1-60.44 16.6 105.7 105.7 0 0 0 46.3-58.19 209 209 0 0 1-66.79 25.37 105.09 105.09 0 0 0-181.73 71.91 116.12 116.12 0 0 0 2.66 24c-87.28-4.3-164.73-46.3-216.56-109.82A105.48 105.48 0 0 0 68 159.6a106.27 106.27 0 0 1-47.53-13.11v1.43a105.28 105.28 0 0 0 84.21 103.06 105.67 105.67 0 0 1-47.33 1.84 105.06 105.06 0 0 0 98.14 72.94A210.72 210.72 0 0 1 25 370.84a202.17 202.17 0 0 1-25-1.43 298.85 298.85 0 0 0 160.83 46.92" fill="currentColor"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Dark mode toggle -->
+        <button id="dark-toggle" type="button" aria-label="Toggle dark mode"
+                class="p-2 text-gray-400 hover:text-white transition-colors rounded-md">
+          <!-- Sun icon (shown in dark mode) -->
+          <svg id="icon-sun" class="w-5 h-5 hidden dark:block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/>
+          </svg>
+          <!-- Moon icon (shown in light mode) -->
+          <svg id="icon-moon" class="w-5 h-5 block dark:hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/>
+          </svg>
+        </button>
+
+        <!-- Mobile hamburger -->
+        <button id="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-menu"
+                class="md:hidden p-2 text-gray-400 hover:text-white transition-colors rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="24" height="24" focusable="false">
+            <title>Menu</title>
+            <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile nav menu -->
+    <div id="nav-menu" class="hidden md:hidden pb-4">
+      <nav class="flex flex-col" aria-label="Mobile navigation">
+        {{ $isDocs2 := hasPrefix .Permalink "/docs" }}
+        {{ $docs2 := index (.Site.Menus.docs) 1 }}
+        {{ $docHome2 := index ($docs2.Children) 0 }}
+        {{ $isUsecases2 := hasPrefix .Permalink "/usecases" }}
+        {{ $usecases2 := index (.Site.Menus.usecases) 0 }}
+        {{ $isCommunity2 := hasPrefix .Permalink "/community" }}
+        {{ $isAdopters2 := hasPrefix .Permalink "/adopters" }}
+        {{ $adopters2 := index (.Site.Menus.adopters) 0 }}
+        {{ $isMedias2 := hasPrefix .Permalink "/medias" }}
+        {{ $medias2 := index (.Site.Menus.medias) 0 }}
+        {{ $isReport2 := hasPrefix .Permalink "/zenoh-report" }}
+        {{ $report2 := index (.Site.Menus.zenohreport) 0 }}
+        {{ $isBlog2 := hasPrefix .Permalink "/blog" }}
+        {{ $blog2 := index (sort .Site.Menus.blog "Weight" "desc") 0 }}
+        <a href="/" class="px-3 py-2 border-l-2 text-sm font-medium {{ if .IsHome }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Home</a>
+        <a href="{{ $docHome2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isDocs2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Documentation</a>
+        <a href="{{ $usecases2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isUsecases2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Use Cases</a>
+        <a href="{{ ref . "/community" }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isCommunity2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Community</a>
+        <a href="{{ $adopters2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isAdopters2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Adopters</a>
+        <a href="{{ $medias2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isMedias2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Media</a>
+        {{ if $report2 }}
+        <a href="{{ $report2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isReport2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Report</a>
+        {{ end }}
+        <a href="{{ $blog2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isBlog2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Blog</a>
+      </nav>
+      <!-- Mobile social icons -->
+      <div class="flex items-center gap-3 px-3 pt-4 border-t border-white/10 mt-2">
+        <a href="https://github.com/eclipse-zenoh/zenoh" target="_blank" rel="noopener" aria-label="GitHub" class="text-gray-400 hover:text-white transition-colors">
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 499.36"><path d="M256 0C114.64 0 0 114.61 0 256c0 113.09 73.34 209 175.08 242.9 12.8 2.35 17.47-5.56 17.47-12.34 0-6.08-.22-22.18-.35-43.54-71.2 15.49-86.2-34.34-86.2-34.34-11.64-29.57-28.42-37.45-28.42-37.45-23.27-15.84 1.73-15.55 1.73-15.55 25.69 1.81 39.21 26.38 39.21 26.38 22.84 39.12 59.92 27.82 74.5 21.27 2.33-16.54 8.94-27.82 16.25-34.22-56.84-6.43-116.6-28.43-116.6-126.49 0-27.95 10-50.8 26.35-68.69-2.63-6.48-11.42-32.5 2.51-67.75 0 0 21.49-6.88 70.4 26.24a242.65 242.65 0 0 1 128.18 0c48.87-33.13 70.33-26.24 70.33-26.24 14 35.25 5.18 61.27 2.55 67.75 16.41 17.9 26.31 40.75 26.31 68.69 0 98.35-59.85 120-116.88 126.32 9.19 7.9 17.38 23.53 17.38 47.41 0 34.22-.31 61.83-.31 70.23 0 6.85 4.61 14.81 17.6 12.31C438.72 464.97 512 369.08 512 256.02 512 114.62 397.37 0 256 0z" fill="currentColor" fill-rule="evenodd"/></svg>
+        </a>
+        <a href="https://discord.gg/2GJ958VuHs" target="_blank" rel="noopener" aria-label="Discord" class="text-gray-400 hover:text-white transition-colors">
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="currentColor" d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/></svg>
+        </a>
+        <a href="https://www.youtube.com/channel/UCslbiyiqgOAPMjCrPWIfQ5Q" target="_blank" rel="noopener" aria-label="YouTube" class="text-gray-400 hover:text-white transition-colors">
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="currentColor" d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.007 2.007 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.007 2.007 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31.4 31.4 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.007 2.007 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A99.788 99.788 0 0 1 7.858 2h.193zM6.4 5.209v4.818l4.157-2.408L6.4 5.209z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile/Navbar toggle JS + dark mode JS -->
+<script>
+  // Mobile nav toggle
+  var navToggle = document.getElementById('nav-toggle');
+  var navMenu = document.getElementById('nav-menu');
+  if (navToggle && navMenu) {
+    navToggle.addEventListener('click', function() {
+      var expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navMenu.classList.toggle('hidden');
+      navToggle.setAttribute('aria-expanded', !expanded);
+    });
+  }
+
+  // Search dropdown toggle
+  var searchToggle = document.getElementById('search-toggle');
+  var searchDropdown = document.getElementById('search-dropdown');
+  if (searchToggle && searchDropdown) {
+    searchToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      searchDropdown.classList.toggle('hidden');
+      if (!searchDropdown.classList.contains('hidden')) {
+        var input = searchDropdown.querySelector('input');
+        if (input) input.focus();
+      }
+    });
+    document.addEventListener('click', function(e) {
+      if (!searchDropdown.contains(e.target) && e.target !== searchToggle) {
+        searchDropdown.classList.add('hidden');
+      }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') searchDropdown.classList.add('hidden');
+    });
+  }
+
+  // Dark mode toggle
+  var darkToggle = document.getElementById('dark-toggle');
+  if (darkToggle) {
+    darkToggle.addEventListener('click', function() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  }
+</script>

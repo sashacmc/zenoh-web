@@ -1,0 +1,36 @@
+{{/*
+  Discord WidgetBot embed partial.
+
+  Usage:
+    Mode A (floating crate, site-wide in footer):
+      {{ partial "discord-widget" (dict "mode" "crate") }}
+
+    Mode B (full iframe embed, community page):
+      {{ partial "discord-widget" (dict "mode" "full") }}
+
+  IMPORTANT: Replace SERVER_ID and CHANNEL_ID below with real values once
+  WidgetBot has been added to the Zenoh Discord server.
+  See: https://widgetbot.io
+  Canonical Discord invite: https://discord.gg/2GJ958VuHs
+
+  To set up:
+  1. Go to https://widgetbot.io and add WidgetBot to the server
+  2. Enable a channel for embedding (e.g. #general or #help)
+  3. Replace SERVER_ID and CHANNEL_ID in this file with the actual IDs
+*/}}
+
+{{ if eq (.mode) "crate" }}
+  {{/* Floating Discord chat bubble (appears on every page) */}}
+  <script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3"
+          async defer
+          data-server="SERVER_ID"
+          data-channel="CHANNEL_ID">
+  </script>
+{{ else if eq (.mode) "full" }}
+  {{/* Full embedded Discord chat (community page only) */}}
+  <iframe src="https://e.widgetbot.io/channels/SERVER_ID/CHANNEL_ID"
+          class="w-full h-96 rounded-xl border border-gray-200 dark:border-gray-700"
+          allow="clipboard-write; fullscreen"
+          title="Zenoh Discord Community Chat">
+  </iframe>
+{{ end }}

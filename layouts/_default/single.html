@@ -1,14 +1,25 @@
 {{ partial "header" . }}
 
-<header class="d-flex flex-column flex-md-row align-items-md-center bg-light ato-lead">
-  <div class="container p-3 p-md-5">
-    <h1 class="ato-title mt-0">{{ .Title }}</h1>
-    <p>{{ .Description }}</p>
-  </div>
-</header>
+<main class="flex-1 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <!-- Page header -->
+  <header class="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ .Title }}</h1>
+    {{ with .Description }}
+    <p class="text-lg text-gray-600 dark:text-gray-400">{{ . }}</p>
+    {{ end }}
+  </header>
 
-<main class="container p-3 p-md-5">
-  {{ .Content }}
+  <!-- Content -->
+  <div class="prose dark:prose-invert max-w-none">
+    {{ .Content }}
+  </div>
+
+  {{ if .Params.discord_embed }}
+  <section class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Community Chat</h2>
+    {{ partial "discord-widget" (dict "mode" "full") }}
+  </section>
+  {{ end }}
 </main>
 
 {{ partial "footer" . }}

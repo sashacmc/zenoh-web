@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Maven Pro font for logo */
+@font-face {
+  font-family: 'Maven Pro';
+  src: url('/fonts/MavenPro-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* Anchor scroll offset so sticky header doesn't overlap */
+html {
+  scroll-padding-top: 4.5rem;
+}
+
+/* Chroma syntax highlighting overrides */
+.chroma {
+  @apply rounded-lg text-sm overflow-x-auto;
+}
+
+/* Sidebar active link */
+.sidebar-link-active {
+  @apply text-zenoh-blue font-semibold;
+}
+
+/* Pagefind UI theme overrides */
+#search, #global-search {
+  --pagefind-ui-scale: 0.9;
+  --pagefind-ui-primary: #1450ff;
+  --pagefind-ui-text: #374151;
+  --pagefind-ui-background: #ffffff;
+  --pagefind-ui-border: #e5e7eb;
+  --pagefind-ui-tag: #f3f4f6;
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: 0.5rem;
+  --pagefind-ui-font: inherit;
+}
+
+.dark #search, .dark #global-search {
+  --pagefind-ui-text: #d1d5db;
+  --pagefind-ui-background: #1f2937;
+  --pagefind-ui-border: #374151;
+  --pagefind-ui-tag: #374151;
+}
+
+/* Prose table improvements */
+.prose table {
+  @apply w-full text-sm;
+}
+
+/* Remove default list styles in nav */
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/*
+ * Docs diagrams — light-background images in dark mode
+ *
+ * All GIF animations and the deployment/topology PNGs were created
+ * for light backgrounds (transparent bg with dark labels and lines).
+ * In dark mode, wrap them in a white card so they display as intended.
+ *
+ * GIFs: topology_anim.gif, zenoh-pub-sub.gif, zenoh-query.gif
+ * PNGs: peer_to_peer, peers_mesh, routed_*, full_topology, etc.
+ */
+.dark .prose img[src$=".gif"],
+.dark .prose img[src*="topology"],
+.dark .prose img[src*="peer_"],
+.dark .prose img[src*="peers_"],
+.dark .prose img[src*="routed_"],
+.dark .prose img[src*="full_"],
+.dark .prose img[src*="zenoh-pub"],
+.dark .prose img[src*="zenoh-query"] {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+}

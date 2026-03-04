@@ -7,4 +7,5 @@
 .hugo_build.lock
 
 .vscode
-node_modules
+node_modules/
+hugo_stats.json

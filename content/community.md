@@ -2,6 +2,7 @@
 title: "The Zenoh Community"
 description: "Get help, discuss problems, and join the fun"
 menu: "community"
+discord_embed: true
 ---
 
 # Communication

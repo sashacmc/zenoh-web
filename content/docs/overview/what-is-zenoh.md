@@ -22,6 +22,47 @@ Technically speaking,  Zenoh is a pub/sub/query protocol that unifies data in mo
 
 Zenoh has achieved all of this by extremely careful design and craftsmanship. It is the first protocol available on the market that has managed to integrate Internet-Scale Publish/ Subscribe with Geo-Distributed Queries. Thus, why not  [getting started](https://zenoh.io/docs/getting-started/first-app/) with it now?  
 
+## The Genesis of Zenoh
+
+Zenoh was conceived and designed by **Angelo Corsaro** — at the time CTO of PrismTech
+and co-chair of the OMG Data Distribution Service (DDS) specification group — during
+his work on extremely large-scale distributed systems for military, aerospace, and
+smart-city projects.
+
+### The problem with existing protocols
+
+No single protocol at the time could span the full range of distributed systems:
+
+- **DDS** offered excellent location transparency for *data in motion* (pub/sub) but
+  could not scale up to Internet scope nor down to microcontrollers.
+- **CoAP** was inherently cloud-centric and client/server.
+- **MQTT** suffered from a broker paradox: two devices on the same local network still
+  had to route communication through a remote cloud broker.
+
+The critical missing piece was *location transparency for data at rest* — querying
+geo-distributed storage without knowing where the data lives. The landscape was a
+"Digital Frankenstein" of stitched-together protocol segments.
+
+### The vision
+
+Angelo designed Zenoh around three core properties:
+
+1. **One protocol** from bare-metal microcontroller to data-center — no bridges or topology constraints.
+2. **Unified abstractions** for data *in motion* (pub/sub), data *at rest* (geo-distributed queries),
+   and *computations* (queryables / map-reduce).
+3. **Flexible topology** — peer-to-peer, brokered, or any hybrid, decided at runtime.
+
+### The name
+
+*Zenoh* carries two layers of meaning:
+
+- **Philosophical:** a tribute to *Zeno of Elea* (pre-Socratic philosopher, paradoxes of motion
+  and infinity) and *Zeno of Citium* (founder of Stoicism — minimalism, disciplined design).
+- **Acronym:** **Z**ero **E**ndpoint **N**etwork **O**verhead **H**andover — capturing the goal
+  of zero unnecessary overhead at every layer.
+
+Read the full origin story in [The Zenoh Report — February 2026](/zenoh-report/2026-02/).
+
 ### Online References
 - [Zenoh: Unifying Communication, Storage and Computation from the Cloud to the Microcontroller](https://bit.ly/3P0DJ3N)
 - [Taming the Dragon Webinar Series](https://www.youtube.com/playlist?list=PLZDEtJusUvAY04pwmpY8uqCG5iQ7NgSrR)

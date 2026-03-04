@@ -20,10 +20,14 @@ The ports used by Zenoh are the following:
   - **7447/tcp** : the Zenoh protocol via TCP
   - **8000/tcp** : the Zenoh REST API
 
-**⚠️ WARNING ⚠️**: _Docker doesn't support UDP multicast between a container and its host (see cases [moby/moby#23659](https://github.com/moby/moby/issues/23659), [moby/libnetwork#2397](https://github.com/moby/libnetwork/issues/2397) or [moby/libnetwork#552](https://github.com/moby/libnetwork/issues/552)). The only case where it works is on Linux using the `--net=host` option to make the container to share the host's networking space (i.e. run: `docker run --init --net=host eclipse/zenoh`)._  
-_The implication of not having UDP multicast working for the Zenoh router is that you need to configure your Zenoh applications (peer or client) with the router's locator as `peer`:_
-  - _running the [examples we provide](#pick-your-programming-language), just add the option: `-e tcp/localhost:7447`_
-  - _writing your own Zenoh application, you need to add a `connect: {endpoints: ["tcp/localhost:7447"]}}` configuration when initiating the Zenoh API_
+{{< warning >}}
+Docker doesn't support UDP multicast between a container and its host (see cases [moby/moby#23659](https://github.com/moby/moby/issues/23659), [moby/libnetwork#2397](https://github.com/moby/libnetwork/issues/2397) or [moby/libnetwork#552](https://github.com/moby/libnetwork/issues/552)). The only case where it works is on Linux using the `--net=host` option to make the container to share the host's networking space (i.e. run: `docker run --init --net=host eclipse/zenoh`).
+
+The implication of not having UDP multicast working for the Zenoh router is that you need to configure your Zenoh applications (peer or client) with the router's locator as `peer`:
+
+- running the [examples we provide](#pick-your-programming-language), just add the option: `-e tcp/localhost:7447`
+- writing your own Zenoh application, you need to add a `connect: {endpoints: ["tcp/localhost:7447"]}}` configuration when initiating the Zenoh API
+{{< /warning >}}
 
 ### Adding plugins and backends to the container
 
@@ -32,7 +36,9 @@ See the relevant chapters for more details about plugins and backends:
  - [Zenoh plugins](../../manual/plugins)
  - [Zenoh backends and storages](../../manual/plugin-storage-manager)
 
-**⚠️ WARNING ⚠️**: _To be compatible with Zenoh in Docker, the libraries must be compiled for **`x86_64-unknown-linux-musl`** target. Look for `.tgz` filenames with this extension when downloading plugins or backends from the [Eclipse zenoh download space](https://download.eclipse.org/zenoh)._
+{{< warning >}}
+To be compatible with Zenoh in Docker, the libraries must be compiled for **`x86_64-unknown-linux-musl`** target. Look for `.tgz` filenames with this extension when downloading plugins or backends from the [Eclipse zenoh download space](https://download.eclipse.org/zenoh).
+{{< /warning >}}
 
 By default the Zenoh router will search for plugins and backends libraries to load in `~/.zenoh/lib`. Thus, to make it able to find the libraries, you can copy them into a `zenoh-docker/lib` directory on your local host and mount the `zenoh-docker` directory as a volume in your container targeting `/root/.zenoh`.
 

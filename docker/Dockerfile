@@ -26,6 +26,11 @@ RUN apt-get update && \
         locales && \
     rm -rf /var/lib/apt/lists/*
 
+# Install Node.js (required for Tailwind CSS and Pagefind)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN locale-gen en_US en_US.UTF-8
 RUN update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 ENV LANG=en_US.UTF-8
@@ -46,4 +51,4 @@ WORKDIR /src
 
 EXPOSE 1313
 
-CMD ["hugo", "server"]
+CMD ["sh", "-c", "npm install && hugo server"]

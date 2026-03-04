@@ -1,0 +1,39 @@
+{{/*
+  yt-card — YouTube video thumbnail card
+  Parameters (pass as dict):
+    id    — YouTube video ID (required)
+    title — video title (required)
+    desc  — short description (optional)
+    badge — label shown as a pill on the thumbnail (optional, e.g. "NEW", "2025")
+*/}}
+{{- $v := . -}}
+<a href="https://www.youtube.com/watch?v={{ $v.id }}" target="_blank" rel="noopener"
+   class="yt-card group flex-shrink-0 scroll-snap-start block no-underline w-72">
+  <div class="relative rounded-xl overflow-hidden bg-gray-900" style="aspect-ratio:16/9">
+    <img src="https://img.youtube.com/vi/{{ $v.id }}/hqdefault.jpg"
+         alt="{{ $v.title }}"
+         class="w-full h-full object-cover group-hover:opacity-75 transition-opacity duration-200"
+         loading="lazy">
+    {{/* Play button overlay */}}
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div class="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center shadow-xl
+                  group-hover:scale-110 transition-transform duration-200 opacity-90 group-hover:opacity-100">
+        <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+      </div>
+    </div>
+    {{/* Optional badge */}}
+    {{ with $v.badge }}
+    <span class="absolute top-2 left-2 px-2 py-0.5 bg-zenoh-blue text-white text-[10px] font-semibold rounded-full tracking-wide">{{ . }}</span>
+    {{ end }}
+    {{/* YouTube "YT" watermark to differentiate from non-YouTube cards */}}
+    <span class="absolute bottom-2 right-2 bg-black/70 text-white text-[9px] font-bold px-1.5 py-0.5 rounded pointer-events-none">▶ YouTube</span>
+  </div>
+  <div class="pt-3 pb-1 px-0.5">
+    <p class="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 leading-snug mb-1">{{ $v.title }}</p>
+    {{ with $v.desc }}
+    <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">{{ . }}</p>
+    {{ end }}
+  </div>
+</a>

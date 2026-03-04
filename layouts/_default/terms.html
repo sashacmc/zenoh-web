@@ -1,27 +1,26 @@
 {{ partial "header" . }}
 
-<header class="d-flex flex-column flex-md-row align-items-md-center bg-light ato-lead">
-  <div class="container p-3 p-md-5">
-    <h1 class="ato-title mt-0">{{ .Title }}</h1>
+<main class="flex-1 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <header class="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ .Title }}</h1>
     {{ with .Description }}
-    <p>{{ . }}</p>
+    <p class="text-lg text-gray-600 dark:text-gray-400">{{ . }}</p>
     {{ end }}
-  </div>
-</header>
+  </header>
 
-<main class="container p-3 p-md-5">
-  {{ .Content }}
-  
-  {{ if .Data.Terms }}
-  <div class="taxonomy-terms">
-    <ul>
-    {{ range .Data.Terms.Alphabetical }}
-      <li>
-        <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a> ({{ .Count }})
-      </li>
-    {{ end }}
-    </ul>
+  <div class="prose dark:prose-invert max-w-none mb-8">
+    {{ .Content }}
   </div>
+
+  {{ if .Data.Terms }}
+  <ul class="space-y-2">
+    {{ range .Data.Terms.Alphabetical }}
+    <li>
+      <a href="{{ .Page.RelPermalink }}" class="text-zenoh-blue dark:text-blue-400 hover:underline">{{ .Page.Title }}</a>
+      <span class="text-gray-400 dark:text-gray-500 text-sm ml-1">({{ .Count }})</span>
+    </li>
+    {{ end }}
+  </ul>
   {{ end }}
 </main>
 
