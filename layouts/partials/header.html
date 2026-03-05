@@ -109,7 +109,7 @@
            class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isDocs }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Documentation</a>
         <a href="{{ $usecases.URL }}"
            class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isUsecases }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Use Cases</a>
-        <a href="{{ ref . "/community" }}"
+        <a href="/community/"
            class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isCommunity }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Community</a>
         <a href="{{ $adopters.URL }}"
            class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isAdopters }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Adopters</a>
@@ -119,7 +119,7 @@
         <a href="{{ $report.URL }}"
            class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isReport }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Report</a>
         {{ end }}
-        <a href="{{ $blog.URL }}"
+        <a href="/blog/"
            class="inline-flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors {{ if $isBlog }}border-white text-white{{ else }}border-transparent text-gray-300 hover:text-white hover:border-white/40{{ end }}">Blog</a>
       </nav>
 
@@ -199,13 +199,13 @@
         <a href="/" class="px-3 py-2 border-l-2 text-sm font-medium {{ if .IsHome }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Home</a>
         <a href="{{ $docHome2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isDocs2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Documentation</a>
         <a href="{{ $usecases2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isUsecases2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Use Cases</a>
-        <a href="{{ ref . "/community" }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isCommunity2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Community</a>
+        <a href="/community/" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isCommunity2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Community</a>
         <a href="{{ $adopters2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isAdopters2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Adopters</a>
         <a href="{{ $medias2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isMedias2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Media</a>
         {{ if $report2 }}
         <a href="{{ $report2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isReport2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Report</a>
         {{ end }}
-        <a href="{{ $blog2.URL }}" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isBlog2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Blog</a>
+        <a href="/blog/" class="px-3 py-2 border-l-2 text-sm font-medium {{ if $isBlog2 }}border-white text-white{{ else }}border-transparent text-gray-300{{ end }}">Blog</a>
       </nav>
       <!-- Mobile social icons -->
       <div class="flex items-center gap-3 px-3 pt-4 border-t border-white/10 mt-2">

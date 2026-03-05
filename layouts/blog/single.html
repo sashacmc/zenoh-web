@@ -85,8 +85,8 @@
 
         {{/* Older ← / → Newer */}}
         <nav class="flex items-center justify-between gap-4" aria-label="Post navigation">
-          {{ with .Next }}
-          <a href="{{ .Permalink }}"
+          {{ with .NextInSection }}
+          <a href="{{ .RelPermalink }}"
              class="group flex-1 flex items-start gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-zenoh-blue dark:hover:text-zenoh-blue transition-colors min-w-0">
             <svg class="w-4 h-4 mt-0.5 flex-shrink-0 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -100,8 +100,8 @@
           <div class="flex-1"></div>
           {{ end }}
 
-          {{ with .Prev }}
-          <a href="{{ .Permalink }}"
+          {{ with .PrevInSection }}
+          <a href="{{ .RelPermalink }}"
              class="group flex-1 flex items-start gap-2 justify-end text-sm text-gray-500 dark:text-gray-400 hover:text-zenoh-blue dark:hover:text-zenoh-blue transition-colors min-w-0 text-right">
             <span class="min-w-0">
               <span class="block text-xs text-gray-400 dark:text-gray-500 mb-0.5">Newer</span>
