@@ -26,7 +26,7 @@ Here's what's in Kiyohime:
 * **Unified reply QoS** — prevent data loss by tying replies to their query's quality of service settings
 * **Callback lifecycle control** — `wait_callbacks()` guarantees your callbacks finish before cleanup proceeds
 * **Zenoh-Pico key expression performance** — linear-time matching with 4x improvements for common patterns
-* **Zenoh-Pico Admin Space** — full session introspection for embedded systems and Zetta C2 integration
+* **Zenoh-Pico Admin Space** — full session introspection for embedded systems 
 * **Liveliness token introspection** — new admin endpoint to query which tokens are alive right now
 * **Reconnection reliability** — fixed traffic restoration after wireless network disruptions
 * **Clearer Rust compatibility** — explicit Rust 1.75 support boundaries with better CMake tooling
@@ -235,7 +235,7 @@ Sending Query '@/*/*/token/**'...
 
 ## Zenoh-Pico
 
-### Admin Space and Zetta C2 Support
+### Admin Space Support
 
 This release introduces Admin Space support in Zenoh-Pico, enabling lightweight introspection of running sessions and providing the foundation required for integration with tooling.
 
