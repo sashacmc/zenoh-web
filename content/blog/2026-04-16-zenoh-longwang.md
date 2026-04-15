@@ -7,7 +7,25 @@ description: "15th April, 2026 -- Paris."
 draft: true
 ---
 
-TODO: Intro
+We are excited to announce the release of Zenoh 1.9.0 **Longwang**!
+
+Named after the Dragon Kings of Chinese mythology who rule over the seas and control water and weather, Longwang represents this release's ability to command and orchestrate increasingly complex network topologies. Just as the four Dragon Kings each govern their domain while working in harmony, Zenoh 1.9.0 brings the power to structure and manage distributed systems with unprecedented flexibility.
+
+This release introduces transformative capabilities for network architecture. The headline feature is **Regions** — a complete reimagining of Zenoh's topology model that breaks free from the traditional three-layer router/peer/client hierarchy. Now you can design arbitrarily deep network trees, configure custom gateway relationships, and scale your deployments beyond the inherent limits of any single topology type. This architectural evolution enables everything from edge robotics deployments that connect hubs as clients instead of routers, to massive-scale systems that span multiple subregions at each level.
+
+Beyond regions, we've significantly enhanced QUIC transport with stream multiplexing and mixed reliability support, introduced a new official Go language binding, evolved Zenoh-Pico's threading model for better resource efficiency and significantly improved single-threaded mode capabilities, and released Nuze 0.3.0 with native Zenoh message decoding.
+
+Key highlights of this release include:
+
+* **Regions Architecture**: Arbitrary network topology hierarchies with custom gateway configuration, replacing the fixed router/peer/client model with flexible region trees.
+* **QUIC Stream Multiplexing**: Independent QUIC streams per priority level to eliminate head-of-line blocking in mixed-priority traffic.
+* **QUIC Mixed Reliability**: Combine reliable streams and best-effort datagrams over a single QUIC connection for optimal performance.
+* **Reliable UDP**: Unsecure QUIC mode providing reliability and multiplexing without TLS overhead for trusted environments.
+* **Zenoh-Go**: Official, idiomatic Go binding with full API coverage from day one.
+* **Zenoh-Pico Async Executor**: Single-threaded task execution reducing resource usage while extending advanced features like advanced pub-sub, connectivity events, auto-reconnection, and peer-to-peer mode to single-threaded environments.
+* **Nuze 0.3.0**: Zenoh message decoding and improved matching listener commands in the Nu-powered Zenoh CLI.
+
+Let's dive into the details!
 
 ## Regions
 
@@ -207,10 +225,13 @@ The functions previously used to spawn (in mult-threaded mode) or run one instan
 
 ## New Go Language Binding
 
-Zenoh 1.9.0 welcomes **[zenoh-go](https://github.com/eclipse-zenoh/zenoh-go)** — an official, idiomatic Go binding for Zenoh.
+Zenoh 1.9.0 welcomes **[zenoh-go](https://github.com/eclipse-zenoh/zenoh-go)** — an official, idiomatic Go binding for Zenoh, made possible through sponsorship by **SoftBank Corp.**
 
 Go developers have long had to reach for the C or C++ bindings to use Zenoh. That changes now. Zenoh-Go wraps [zenoh-c](https://github.com/eclipse-zenoh/zenoh-c) via CGo and exposes a Go-native interface: error returns instead of panics, `defer` for resource cleanup, closures for callbacks, and option types for nullable parameters. The full Zenoh API surface is covered from day one.
-Getting Started
+
+We extend our sincere gratitude to SoftBank Corp. for sponsoring the development of zenoh-go, enabling first-class Zenoh support for the Go ecosystem.
+
+### Getting Started
 
 Add zenoh-go to your module:
 
@@ -296,10 +317,20 @@ The `zenoh {pub,querier} matching-status` experimental commands are replaced by 
 The Nuze CLI now supports the `--include-paths (-I)` option (analogous to Nushell’s). This is a comma-delimited list of module paths included at startup in the Nuze context.
 
 ## Changelogs
+
 The full changelog for every Zenoh repository is available at the following links:
 
 [Rust](https://github.com/eclipse-zenoh/zenoh/releases) | [C](https://github.com/eclipse-zenoh/zenoh-c/releases) | [C++](https://github.com/eclipse-zenoh/zenoh-cpp/releases) | [Python](https://github.com/eclipse-zenoh/zenoh-python/releases) | [Java](https://github.com/eclipse-zenoh/zenoh-java/releases) | [Kotlin](https://github.com/eclipse-zenoh/zenoh-kotlin/releases) | [TypeScript](https://github.com/eclipse-zenoh/zenoh-ts/releases) | [Pico](https://github.com/eclipse-zenoh/zenoh-pico/releases) | [DDS plugin](https://github.com/eclipse-zenoh/zenoh-plugin-dds/releases) | [ROS2 plugin](https://github.com/eclipse-zenoh/zenoh-plugin-ros2dds/releases) | [MQTT plugin](https://github.com/eclipse-zenoh/zenoh-plugin-mqtt/releases) | [WebServer plugin](https://github.com/eclipse-zenoh/zenoh-plugin-webserver/releases) | [Filesystem backend](https://github.com/eclipse-zenoh/zenoh-backend-filesystem/releases) | [RocksDB backend](https://github.com/eclipse-zenoh/zenoh-backend-rocksdb/releases) | [S3 backend](https://github.com/eclipse-zenoh/zenoh-backend-s3/releases) | [InfluxDB backend](https://github.com/eclipse-zenoh/zenoh-backend-influxdb/releases)
 
+Zenoh 1.9.0 **Longwang** marks a pivotal evolution in distributed systems architecture. This release fundamentally transforms how you architect Zenoh networks, giving you the flexibility to design topologies that match your system's needs rather than conforming to rigid hierarchies. Whether you're building edge robotics systems with novel hub-to-cloud patterns, scaling to hundreds of nodes across multiple subregions, or optimizing transport performance with QUIC multiplexing, Longwang provides the tools to command your distributed infrastructure with precision.
 
-– The Zenoh Team
+The new Regions architecture opens up deployment patterns that were simply impossible before, while improvements across QUIC transport, language bindings, and Zenoh-Pico ensure that performance and developer experience keep pace with these architectural advances. From the new Go binding bringing idiomatic Zenoh to Go developers, to the async executor making single-threaded embedded deployments more capable than ever, this release delivers enhancements across the entire ecosystem.
+
+We're excited to see what network architectures you'll design with these new capabilities. As always, your feedback, contributions, and real-world deployment stories help shape the future of Zenoh. Join the conversation, share your experiences, and help us continue making Zenoh better for everyone.
+
+You can reach us on [Zenoh's Discord server](https://discord.com/invite/vSDSpqnbkm)!
+
+Like the Dragon Kings orchestrating the waters with wisdom and power, may your systems flow harmoniously across any topology,
+
+**– The Zenoh Team**
 
