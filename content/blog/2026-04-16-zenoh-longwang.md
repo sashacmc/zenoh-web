@@ -30,8 +30,8 @@ Let's dive into the details!
 ## Regions
 
 Zenoh as a routing protocol weaves together multiple topology types within the same network:
-peer-to-peer (clique), link-state (mesh) and brokered (star). Pre-regions Zenoh nodes route messages
-between routers, peers and clients using link-state, peer-to-peer and brokered networks
+peer-to-peer (clique), link-state (mesh), and brokered (star). Pre-regions Zenoh nodes route messages
+between routers, peers, and clients using link-state, peer-to-peer, and brokered networks,
 respectively. The different network topologies are organized in a tree hierarchy in order to avoid
 loops and support the interest protocol.
 
@@ -43,8 +43,8 @@ are north-bound w.r.t. peers and clients; clients are south-bound w.r.t. peers a
 Post-regions Zenoh on the other hand does away with the traditional three-layer router/peer/client
 hierarchies. Instead, network topology hierarchies may now span an arbitrary number of layers. Zenoh
 1.9 however ships with a limitation on bound relations: routers may only sit south of other routers,
-this is enforced at establishment time (i.e. Zenoh's "handshake"). Otherwise you may knock yourself
-out.
+which is enforced at establishment time (i.e., Zenoh's "handshake"). Beyond this constraint, you have
+complete freedom in designing your region tree architecture.
 
 A region may be seen as the set of nodes comprising a network topology. Each element of the tree of
 topologies is thus a region. Regions allow you more flexibility when designing your system's _region
@@ -58,9 +58,9 @@ resources needed to run a network of connected robots.
 The number of nodes in a region tree may be scaled beyond the inherent constraints of the
 peer-to-peer, link-state and brokered topologies by increasing the tree's width and/or height.
 
-First, each Zenoh node supports arbitrary arrays of subregions: instead of a being limited to—for
+First, each Zenoh node supports arbitrary arrays of subregions: instead of being limited to—for
 example—a single peer-to-peer subregion of hundreds of peers (number of connections grows
-quadratically) one may deploy multiple such subregions.
+quadratically), one may deploy multiple such subregions.
 
 Second, the region tree may be arbitrarily deep. This is important because Zenoh is designed to
 lower the overhead of discovery the further you go down the tree: the tree root stores all entities,
@@ -69,7 +69,7 @@ while the leaves only store what is strictly necessary.
 ### Configuration
 
 All Zenoh nodes are technically gateways. _Custom_ gateways are nodes with non-default gateway
-configuration. The region_name config option is an optional non-empty UTF-8 string of at most 32
+configuration. The `region_name` config option is an optional non-empty UTF-8 string of at most 32
 bytes. It is conceptually a name used to identify an application's north region. It can be matched
 against in gateway configuration to assign remotes a north/south bound.
 
@@ -119,7 +119,7 @@ Given a remote R connecting to node N—whether inbound or outbound—to a gatew
    fields are interpreted as wildcards.
 3. R matches an individual field in N's configuration if it matches any of its elements.
 
-A filter may be negated by setting negated = true. A negated filter matches a remote if the remote
+A filter may be negated by setting `negated = true`. A negated filter matches a remote if the remote
 does not match the filter's other fields. This is useful for "match everyone except" patterns:
 
 ```toml
@@ -175,27 +175,25 @@ in order for the gateways to de-duplicate data travelling upstream.
 ### Region identifiers
 
 - **`north`**: The region of mutually north-bound nodes.
-- **`south:<n>:<client|peer|router>`**: For example, `south:3:peer` the 3rd south-bound peer
+- **`south:<n>:<client|peer|router>`**: For example, `south:3:peer` is the third south-bound peer
   subregion. `n` is the index of the subregion's configuration in the `gateway.south` array.
 - **`local`**: Functionally equivalent to `south:<n>:client` but reserved for local sessions.
 
 This syntax is used in adminspace and in logs.
 
-
 ## Improved QUIC support
 
-Zenoh 1.9 introduces two significant enhancements to the QUIC link’s capabilities: QUIC stream multiplexing (multistream) which operates independent QUIC streams to reduce head-of-line blocking, and mixed reliability to leverage both QUIC streams and datagrams over a single connection. Both features are compatible with each-other, and are negotiated via QUIC ALPN for interoperability between configurations and backwards compatibility.
+Zenoh 1.9 introduces two significant enhancements to the QUIC link's capabilities: QUIC stream multiplexing (multistream) which operates independent QUIC streams to reduce head-of-line blocking, and mixed reliability to leverage both QUIC streams and datagrams over a single connection. Both features are compatible with each other, and are negotiated via QUIC ALPN for interoperability between configurations and backwards compatibility.
 
 Additionally, we’ve introduced a reliable UDP link via unsecure QUIC for low-overhead reliable communication in trusted environments, which fully inherits supported QUIC features.
 
 Below are brief descriptions of these new features. Additional details will be available on the [official Zenoh documentation](https://zenoh.io/docs/manual/quic/).
 
-
 ### Stream Multiplexing (Multistream)
 
 Multistream QUIC maps each Zenoh priority level to a dedicated QUIC stream, preventing head-of-line blocking by isolating high-priority traffic from lower-priority flows. Configure it by setting `multistream=[auto|0|1]` in endpoint parameters.
 
-Ex: `quic/127.0.0.1:7447?multistream=1`
+Example: `quic/127.0.0.1:7447?multistream=1`
 
 Default config is set to `auto`, which allows negotiation between peers while maintaining backward compatibility with older Zenoh versions.
 
@@ -203,25 +201,27 @@ Default config is set to `auto`, which allows negotiation between peers while ma
 
 Mixed reliability enables QUIC streams and datagrams over a single connection. Reliable messages (`Reliability::Reliable`) travel over QUIC streams while best-effort messages (`Reliability::BestEffort`) use QUIC datagrams. Enable by adding `mixed_rel=[0|auto|1]` in endpoint configuration. Compatible with multistream QUIC for combined functionality.
 
-Ex: `quic/127.0.0.1:7447?mixed_rel=1`
+Example: `quic/127.0.0.1:7447?mixed_rel=1`
 
-Mixed reliability’s default config is set to disabled, in order to maintain basic QUIC endpoints as single fully-reliable links. An `auto` setting is available to allow for negotiation of the feature while remaining compatible with peers that disable it or don’t support it.
+The mixed reliability default config is set to disabled, in order to maintain basic QUIC endpoints as single fully-reliable links. An `auto` setting is available to allow for negotiation of the feature while remaining compatible with peers that disable it or don't support it.
 
 ### Reliable UDP via unsecure QUIC
 
 When symmetric encryption’s CPU-overhead is not negligible, unsecure QUIC provides QUIC's reliability, stream multiplexing, and mixed reliability over UDP without TLS encryption. It exposes all data in plaintext and removes TLS authentication, making it vulnerable to a multitude of network attacks. This feature is intended for use in trusted network environments, or simply for prototyping.
 
-Reliable UDP can be enabled by setting `rel=1` in the endpoint’s config. It is fully compatible with multistream and mixed reliability.
+Reliable UDP can be enabled by setting `rel=1` in the endpoint's config. It is fully compatible with multistream and mixed reliability.
 
-Ex: `udp/localhost:7447?rel=1`, `udp/localhost:7447?rel=1;mixed_rel=1;multistream=1`
-
+Example: `udp/localhost:7447?rel=1`, `udp/localhost:7447?rel=1;mixed_rel=1;multistream=1`
 
 ## Zenoh-Pico
-In Zenoh-Pico v1.9 we significantly reworked background threads running various zenoh session tasks, like read, lease, accept, reconnect etc. We switched to using an asynchronous executor which runs all the tasks in a single thread. Given that there was only a single computationally-intensive task - read, while others were sleeping most of the time,  the reduction in number of threads to one does not have any visible impact on performance, but at the same time it requires less system resources - which is important for certain micro-controllers. In addition, in case of reconnection, we no longer need to destroy existing threads and spawn new ones: now the executor just suspends all network background tasks on connection loss and automatically resumes them once the reconnection task succeeds.
 
-Another advantage, is that the executor can be spinned manually without any need for any background thread in single-threaded mode, using session’s `z_spin_once` function, which allows to trivially extend all previously multi-threaded-only functionality such as advanced-pub-sub, connectivity events, auto-reconnection or peer-to-peer mode to single-threaded case.
+In Zenoh-Pico v1.9, we significantly reworked background threads running various Zenoh session tasks, including read, lease, accept, reconnect, and others. We switched to using an asynchronous executor which runs all the tasks in a single thread.
 
-The functions previously used to spawn (in mult-threaded mode) or run one instance of specific task (in single-threaded mode) such as `zp_start_read_task`, `zp_start_lease_task`, `zp_read`, `zp_send_join`, `zp_send_keep_alive` were deprecated (although they still should work as previously).
+Given that there was only a single computationally-intensive task (read) while others were sleeping most of the time, the reduction in number of threads to one does not have any visible impact on performance. At the same time, it requires fewer system resources, which is important for certain microcontrollers. In addition, in case of reconnection, we no longer need to destroy existing threads and spawn new ones. Now the executor simply suspends all network background tasks on connection loss and automatically resumes them once the reconnection task succeeds.
+
+Another advantage is that the executor can be spun manually without any need for a background thread in single-threaded mode, using the session's `z_spin_once` function. This allows us to trivially extend all previously multi-threaded-only functionality such as advanced pub-sub, connectivity events, auto-reconnection, and peer-to-peer mode to the single-threaded case.
+
+The functions previously used to spawn (in multi-threaded mode) or run one instance of a specific task (in single-threaded mode)—such as `zp_start_read_task`, `zp_start_lease_task`, `zp_read`, `zp_send_join`, and `zp_send_keep_alive`—were deprecated (although they should still work as previously).
 
 ## New Go Language Binding
 
@@ -241,7 +241,7 @@ go get github.com/eclipse-zenoh/zenoh-go
 
 > **Prerequisite:** zenoh-c must be installed on the system, built with unstable API support (`-DZENOHC_BUILD_WITH_UNSTABLE_API=ON`). See the [zenoh-c README](https://github.com/eclipse-zenoh/zenoh-c) for instructions.
 
-Publishing Data
+#### Publishing Data
 
 ```go
 session, err := zenoh.Open(zenoh.NewDefaultConfig(), nil)
@@ -261,7 +261,7 @@ defer pub.Drop()
 pub.Put(zenoh.NewZBytesFromString("Hello from Go!"), nil)
 ```
 
-Subscribing to Data
+#### Subscribing to Data
 
 ```go
 session, err := zenoh.Open(zenoh.NewDefaultConfig(), nil)
@@ -289,7 +289,8 @@ stop := make(chan os.Signal, 1)
 signal.Notify(stop, os.Interrupt)
 <-stop
 ```
-What's Included
+
+### What's Included
 
 Zenoh-Go ships with a full set of examples covering the entire API:
 
@@ -307,12 +308,11 @@ You can find all examples in the [examples/](https://github.com/eclipse-zenoh/ze
 
 ## Nuze 0.3.0
 
-This version of [Nuze](https://github.com/ZettaScaleLabs/nuze) bumps Zenoh from 1.7.1 to 1.9.0 and bumps Nu from 0.106.1 to 0.112.1.
+This version of [Nuze](https://github.com/ZettaScaleLabs/nuze) updates Zenoh from 1.7.1 to 1.9.0 and updates Nu from 0.106.1 to 0.112.1.
 
-A new experimental command is added: zenoh decode which allows you to easily decode byte payloads of Zenoh scouting or transport messages and natively manipulate them as Nu records.
+A new experimental command is added: `zenoh decode`, which allows you to easily decode byte payloads of Zenoh scouting or transport messages and natively manipulate them as Nu records.
 
-The `zenoh {pub,querier} matching-status` experimental commands are replaced by `zenoh
-  {pub,querier} matching-listener` which returns a stream of updates instead of querying the current matching status and returning.
+The `zenoh {pub,querier} matching-status` experimental commands are replaced by `zenoh {pub,querier} matching-listener`, which returns a stream of updates instead of querying the current matching status and returning.
 
 The Nuze CLI now supports the `--include-paths (-I)` option (analogous to Nushell’s). This is a comma-delimited list of module paths included at startup in the Nuze context.
 
