@@ -1,9 +1,9 @@
 ---
 title: "Zenoh 1.9.0: Longwang"
-date: 2026-04-15
+date: 2026-04-16
 menu: "blog"
-weight: 20260415
-description: "15th April, 2026 -- Paris."
+weight: 20260416
+description: "16th April, 2026 -- Paris."
 draft: true
 ---
 
