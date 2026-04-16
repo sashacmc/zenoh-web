@@ -1,5 +1,5 @@
 ---
-title: "Zenoh 1.9.0: Longwang"
+title: "Zenoh 1.9.x: Longwang"
 date: 2026-04-16
 menu: "blog"
 weight: 20260416
@@ -7,9 +7,9 @@ description: "16th April, 2026 -- Paris."
 draft: true
 ---
 
-We are excited to announce the release of Zenoh 1.9.0 **Longwang**!
+We are excited to announce the release of Zenoh 1.9.x **Longwang**!
 
-Named after the Dragon Kings of Chinese mythology who rule over the seas and control water and weather, Longwang represents this release's ability to command and orchestrate increasingly complex network topologies. Just as the four Dragon Kings each govern their domain while working in harmony, Zenoh 1.9.0 brings the power to structure and manage distributed systems with unprecedented flexibility.
+Named after the Dragon Kings of Chinese mythology who rule over the seas and control water and weather, Longwang represents this release's ability to command and orchestrate increasingly complex network topologies. Just as the four Dragon Kings each govern their domain while working in harmony, Zenoh 1.9.x brings the power to structure and manage distributed systems with unprecedented flexibility.
 
 This release introduces transformative capabilities for network architecture. The headline feature is **Regions** — a complete reimagining of Zenoh's topology model that breaks free from the traditional three-layer router/peer/client hierarchy. Now you can design arbitrarily deep network trees, configure custom gateway relationships, and scale your deployments beyond the inherent limits of any single topology type. This architectural evolution enables everything from edge robotics deployments that connect hubs as clients instead of routers, to massive-scale systems that span multiple subregions at each level.
 
@@ -326,7 +326,7 @@ The full changelog for every Zenoh repository is available at the following link
 
 [Rust](https://github.com/eclipse-zenoh/zenoh/releases) | [C](https://github.com/eclipse-zenoh/zenoh-c/releases) | [C++](https://github.com/eclipse-zenoh/zenoh-cpp/releases) | [Python](https://github.com/eclipse-zenoh/zenoh-python/releases) | [Java](https://github.com/eclipse-zenoh/zenoh-java/releases) | [Kotlin](https://github.com/eclipse-zenoh/zenoh-kotlin/releases) | [TypeScript](https://github.com/eclipse-zenoh/zenoh-ts/releases) | [Pico](https://github.com/eclipse-zenoh/zenoh-pico/releases) | [DDS plugin](https://github.com/eclipse-zenoh/zenoh-plugin-dds/releases) | [ROS2 plugin](https://github.com/eclipse-zenoh/zenoh-plugin-ros2dds/releases) | [MQTT plugin](https://github.com/eclipse-zenoh/zenoh-plugin-mqtt/releases) | [WebServer plugin](https://github.com/eclipse-zenoh/zenoh-plugin-webserver/releases) | [Filesystem backend](https://github.com/eclipse-zenoh/zenoh-backend-filesystem/releases) | [RocksDB backend](https://github.com/eclipse-zenoh/zenoh-backend-rocksdb/releases) | [S3 backend](https://github.com/eclipse-zenoh/zenoh-backend-s3/releases) | [InfluxDB backend](https://github.com/eclipse-zenoh/zenoh-backend-influxdb/releases)
 
-Zenoh 1.9.0 **Longwang** marks a pivotal evolution in distributed systems architecture. This release fundamentally transforms how you architect Zenoh networks, giving you the flexibility to design topologies that match your system's needs rather than conforming to rigid hierarchies. Whether you're building edge robotics systems with novel hub-to-cloud patterns, scaling to hundreds of nodes across multiple subregions, or optimizing transport performance with QUIC multiplexing, Longwang provides the tools to command your distributed infrastructure with precision.
+Zenoh 1.9.x **Longwang** marks a pivotal evolution in distributed systems architecture. This release fundamentally transforms how you architect Zenoh networks, giving you the flexibility to design topologies that match your system's needs rather than conforming to rigid hierarchies. Whether you're building edge robotics systems with novel hub-to-cloud patterns, scaling to hundreds of nodes across multiple subregions, or optimizing transport performance with QUIC multiplexing, Longwang provides the tools to command your distributed infrastructure with precision.
 
 The new Regions architecture opens up deployment patterns that were simply impossible before, while improvements across QUIC transport, language bindings, and Zenoh-Pico ensure that performance and developer experience keep pace with these architectural advances. From the new Go binding bringing idiomatic Zenoh to Go developers, to the async executor making single-threaded embedded deployments more capable than ever, this release delivers enhancements across the entire ecosystem.
 
